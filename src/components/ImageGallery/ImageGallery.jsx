@@ -1,11 +1,20 @@
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
-
-export const ImageGallery = ({ photos }) => {
+import { Gallery } from './ImageGallery.styled';
+export const ImageGallery = ({ photos, openModal, getModalImg }) => {
   return (
-    <ul className="gallery">
+    <Gallery>
       {photos.map(({ id, webformatURL, tags }) => {
-        return <ImageGalleryItem key={id} url={webformatURL} tags={tags} />;
+        return (
+          <ImageGalleryItem
+            openModal={openModal}
+            getModalImg={getModalImg}
+            key={id}
+            id={id}
+            url={webformatURL}
+            tags={tags}
+          />
+        );
       })}
-    </ul>
+    </Gallery>
   );
 };

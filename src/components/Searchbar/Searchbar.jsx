@@ -1,9 +1,9 @@
 import { Component } from 'react';
+import { BsSearch } from 'react-icons/bs';
 import {
   Header,
   Searchform,
   Formbutton,
-  BtnText,
   SearchInput,
 } from './Searchbar.styled';
 
@@ -13,13 +13,13 @@ export class Searchbar extends Component {
   };
 
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value.trim() });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.onSubmit(this.state.query);
-    // this.setState({ query: '' });
+    this.setState({ query: '', });
   };
 
   render() {
@@ -28,7 +28,7 @@ export class Searchbar extends Component {
       <Header>
         <Searchform onSubmit={this.handleSubmit}>
           <Formbutton type="submit">
-            <BtnText>Search</BtnText>
+            <BsSearch />
           </Formbutton>
 
           <SearchInput

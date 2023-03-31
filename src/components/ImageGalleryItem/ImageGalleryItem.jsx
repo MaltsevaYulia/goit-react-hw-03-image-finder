@@ -1,9 +1,24 @@
-export const ImageGalleryItem = ({url,tags}) => {
+import { Component } from "react";
+import { Galleryitem, Galleryimage } from './ImageGalleryItem.styled';
+
+export class ImageGalleryItem extends Component {
+  handleClick=(e)=> {
+    this.props.getModalImg(e.target.id);
+    this.props.openModal();
+  }
+
+  render() {
+    const { url, tags,id } = this.props;
     return (
-      <li className="gallery-item" >
-            <img src={url} alt={tags} width={240} />
-      </li>
+      <Galleryitem>
+        <Galleryimage
+          id={id}
+          src={url}
+          alt={tags}
+          onClick={this.handleClick}
+        />
+      </Galleryitem>
     );
+  }
 }
 
-//onClick={handleClick}

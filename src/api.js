@@ -20,23 +20,24 @@ export default class SearchPhotos {
     // this.perPage = options.params.per_page;
   }
   async fetchPhotos(query) {
-    try {
-      const response = await axios.get(
+    const response = await axios.get(
         `${BASE_URL}?q=${query}&page=${this.page}`,
         options
       );
       console.log('🚀  response.data', response.data);
 
-      if (!response.data.totalHits) {
+    if (response.data.hits.length===0) {
         throw new Error(response.status);
       }
-
-      // this.incrementPage();
       return response.data;
-    } catch (error) {
-      return error;
-    }
+    // try {
+      
+    // }
+    // catch (error) {
+    //   return error;
+    // }
   }
+
   incrementPage() {
     this.page += 1;
   }
