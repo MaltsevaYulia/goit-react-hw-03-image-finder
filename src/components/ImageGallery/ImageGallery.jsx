@@ -1,5 +1,7 @@
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 import { Gallery } from './ImageGallery.styled';
+import PropTypes from 'prop-types';
+
 export const ImageGallery = ({ photos, openModal, getModalImg }) => {
   return (
     <Gallery>
@@ -17,4 +19,14 @@ export const ImageGallery = ({ photos, openModal, getModalImg }) => {
       })}
     </Gallery>
   );
+};
+
+ImageGallery.protoType = {
+  photos: PropTypes.arrayOf({
+    id: PropTypes.number.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }),
+  getModalImg:PropTypes.func.isRequired,
+  openModal:PropTypes.func.isRequired,
 };

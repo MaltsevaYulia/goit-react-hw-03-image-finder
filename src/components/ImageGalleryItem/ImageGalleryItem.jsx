@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Galleryitem, Galleryimage } from './ImageGalleryItem.styled';
+import PropTypes from 'prop-types';
 
 export class ImageGalleryItem extends Component {
   handleClick=(e)=> {
@@ -21,4 +22,12 @@ export class ImageGalleryItem extends Component {
     );
   }
 }
+
+ImageGalleryItem.protoType = {
+  url: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  getModalImg: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+};
 
