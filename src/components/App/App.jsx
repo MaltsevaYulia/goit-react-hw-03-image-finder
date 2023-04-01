@@ -5,8 +5,7 @@ import { Button } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
 import { Modal } from '../Modal/Modal';
 import { AppDiv } from './App.styled';
-
-import SearchPhotos from '../../api';
+import SearchPhotos from '../../api/api';
 
 const searchPhotos = new SearchPhotos();
 
@@ -35,7 +34,6 @@ export class App extends Component {
     try {
       const photos = await searchPhotos.fetchPhotos(query);
       this.setState({ photos: photos.hits });
-      // this.updateState(photos.hits, query);
     } catch (error) {
       console.log(error);
       alert(
@@ -53,18 +51,6 @@ export class App extends Component {
     }
   };
 
-  // updateState = (newPhotos, query) => {
-  //   // const { photos } = this.state;
-  //   if (!this.state.photos || this.state.query !== query) {
-  //     return this.setState({ photos: newPhotos, query });
-  //   } else if (this.state.photos && this.state.query === query) {
-  //     return this.setState(prevState => {
-  //       const prevPhotos = prevState.photos;
-  //       return { photos: [...prevPhotos, ...newPhotos] };
-  //     });
-  //   }
-  // };
-
   loadMore = async () => {
     searchPhotos.incrementPage();
     const query = this.state.query;
@@ -75,7 +61,6 @@ export class App extends Component {
         const prevPhotos = prevState.photos;
         return { photos: [...prevPhotos, ...photos.hits] };
       });
-      // this.updateState(photos.hits, query);
     } catch (error) {
       this.setState({ isLoadMore: false });
       alert("We're sorry, but you've reached the end of search results.");
