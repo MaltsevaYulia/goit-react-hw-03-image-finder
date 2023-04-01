@@ -70,15 +70,16 @@ export const Formbutton = styled.button`
 export const SearchInput = styled.input`
   display: inline-block;
   width: 100%;
+  height: 100%;
   font: inherit;
-  font-size: 20px;
+  font-size: 16px;
   border: none;
   outline: none;
   padding-left: 4px;
   padding-right: 4px;
   &::placeholder {
-   font: inherit;
-   font-size: 18px;
- }
+    font: inherit;
+    font-size: 18px;
+  }
 `;
 
