@@ -8,20 +8,12 @@ const options = {
     key: API_KEY,
     image_type: 'photo',
     orientation: 'horizontal',
-    // safesearch: true,
     per_page: 12,
   },
 };
-
-export default class SearchPhotos {
-  constructor() {
-    this.page = 1;
-    // this.q = '';
-    // this.perPage = options.params.per_page;
-  }
-  async fetchPhotos(query) {
+export default async function fetchPhotos(query, page) {
     const response = await axios.get(
-        `${BASE_URL}?q=${query}&page=${this.page}`,
+        `${BASE_URL}?q=${query}&page=${page}`,
         options
       );
       console.log('🚀  response.data', response.data);
@@ -30,19 +22,5 @@ export default class SearchPhotos {
         throw new Error(response.status);
       }
       return response.data;
-    // try {
-      
-    // }
-    // catch (error) {
-    //   return error;
-    // }
   }
 
-  incrementPage() {
-    this.page += 1;
-  }
-
-  resetPage() {
-    this.page = 1;
-  }
-}

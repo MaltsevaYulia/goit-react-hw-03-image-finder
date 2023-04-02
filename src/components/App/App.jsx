@@ -5,14 +5,14 @@ import { Button } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
 import { Modal } from '../Modal/Modal';
 import { AppDiv } from './App.styled';
-import SearchPhotos from '../../api/api';
+import fetchPhotos from '../../api/api';
 
-const searchPhotos = new SearchPhotos();
 
 export class App extends Component {
   state = {
     photos: null,
     query: '',
+    page: 1,
     isLoading: false,
     isLoadMore: false,
     isModalShow: false,
@@ -22,26 +22,27 @@ export class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     // Если изменилось query, ищем фото
     const prevQuery = prevState.query;
-    const { query } = this.state;
+    const prevPage = prevState.page;
+    const { query, page } = this.state;
     if (prevQuery !== query) {
+      this.setState({ photos: null });
+      this.setState({ page: 1 });
       this.search(query);
-    }
+    } else if (prevPage !== page) this.search(query);
   }
 
   search = async query => {
-    searchPhotos.resetPage();
     this.setState({ isLoading: true });
     try {
-      const photos = await searchPhotos.fetchPhotos(query);
+      const photos = await fetchPhotos(query, this.state.page);
       this.setState({ photos: photos.hits });
+      this.setState({ isLoadMore: true });
     } catch (error) {
       console.log(error);
-      alert(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
+      this.setState({ isLoadMore: false });
+      alert('Sorry, there are no images. Please try again.');
     } finally {
       this.setState({ isLoading: false });
-      this.setState({ isLoadMore: true });
     }
   };
 
@@ -51,22 +52,12 @@ export class App extends Component {
     }
   };
 
-  loadMore = async () => {
-    searchPhotos.incrementPage();
-    const query = this.state.query;
-    this.setState({ isLoading: true });
-    try {
-      const photos = await searchPhotos.fetchPhotos(query);
-      this.setState(prevState => {
-        const prevPhotos = prevState.photos;
-        return { photos: [...prevPhotos, ...photos.hits] };
-      });
-    } catch (error) {
-      this.setState({ isLoadMore: false });
-      alert("We're sorry, but you've reached the end of search results.");
-    } finally {
-      this.setState({ isLoading: false });
-    }
+  loadMore = () => {
+    this.setState(prevState => {
+      const prevPage = prevState.page;
+      return { page: prevPage + 1 };
+    });
+   
   };
 
   toggleModal = () => {
@@ -94,7 +85,9 @@ export class App extends Component {
           />
         )}
         {isLoading && <Loader />}
-        {photos && isLoadMore && <Button loadMore={this.loadMore} />}
+        {photos && isLoadMore && !isLoading && (
+          <Button loadMore={this.loadMore} />
+        )}
         {isModalShow && <Modal onClose={this.toggleModal} url={largeUrl} />}
       </AppDiv>
     );
