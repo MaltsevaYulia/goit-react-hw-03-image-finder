@@ -7,7 +7,6 @@ import { Modal } from '../Modal/Modal';
 import { AppDiv } from './App.styled';
 import fetchPhotos from '../../api/api';
 
-
 export class App extends Component {
   state = {
     photos: null,
@@ -26,7 +25,7 @@ export class App extends Component {
     const { query, page } = this.state;
     if (prevQuery !== query) {
       this.setState({ photos: null });
-      this.setState({ page: 1 });
+
       this.search(query);
     } else if (prevPage !== page) this.search(query);
   }
@@ -35,7 +34,15 @@ export class App extends Component {
     this.setState({ isLoading: true });
     try {
       const photos = await fetchPhotos(query, this.state.page);
-      this.setState({ photos: photos.hits });
+      if (!this.state.photos) {
+        this.setState({ photos: photos.hits });
+      } else {
+        this.setState(prevState => {
+          const prevPhotos = prevState.photos;
+          return { photos: [...prevPhotos, ...photos.hits] };
+        });
+      }
+      
       this.setState({ isLoadMore: true });
     } catch (error) {
       console.log(error);
@@ -48,7 +55,8 @@ export class App extends Component {
 
   getQuery = query => {
     if (this.state.query !== query) {
-      return this.setState({ query });
+      this.setState({ page: 1 });
+      this.setState({ query });
     }
   };
 
@@ -57,7 +65,6 @@ export class App extends Component {
       const prevPage = prevState.page;
       return { page: prevPage + 1 };
     });
-   
   };
 
   toggleModal = () => {
